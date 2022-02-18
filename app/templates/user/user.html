@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block USERPAGE %} active {% endblock %}
+
+{% block page_content %}
+<br>
+<h1 class="h2 mb-3 font-weight-normal">{{ user.user_name }}</h1>
+<div class="container col-4">
+<table class="table border">
+    <tbody>
+    <tr>
+        <td>First name:</td>
+        <td>{{ user.first_name }}</td>
+    </tr>
+    <tr>
+        <td>Last name:</td>
+        <td>{{ user.last_name }}</td>
+    </tr>
+    <tr>
+        <td>Email:</td>
+        <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+        <td>Phonenumber:</td>
+        <td>{{ user.phonenumber }}</td>
+    </tr>
+    <tr>
+        <td>Registration date:</td>
+        <td>{{ user.created }}</td>
+    </tr>
+    </tbody>
+</table>
+{% if user == current_user %}
+<div class="col-12">
+    <a class="btn btn-outline-secondary" href="{{ url_for('blueprint_user.edit_profile') }}">
+        Edit profile
+    </a>
+</div>
+{% endif %}
+</div>
+{% endblock %}
