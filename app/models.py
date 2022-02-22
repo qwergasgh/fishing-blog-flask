@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from whoosh.analysis import StemmingAnalyzer
-from flask_login import UserMixin
-from app import db, app
+from flask_login import UserMixin, AnonymousUserMixin
+from app import db, app, login
 from datetime import datetime
 import jwt
 
@@ -24,8 +24,8 @@ class User(db.Model, UserMixin):
         super(User, self).__init__(**kwargs)
         if self.role_id is None:
             self.role_id = Role.query.filter_by(privilege=False).first().id
-        # else:
-        #     self.role_id = Role.query.filter_by(privilege=True).first().id
+        else:
+            self.role_id = Role.query.filter_by(privilege=True).first().id
 
     @property
     def password(self):
@@ -58,7 +58,15 @@ class User(db.Model, UserMixin):
             return
         return User.query.get(id)
 
+class AnonymousUser(AnonymousUserMixin):
+    def is_administrator(self):
+        return False
 
+login.anonymous_user = AnonymousUser
+
+@login.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class Role(db.Model):
     __tablename__ = 'Role'

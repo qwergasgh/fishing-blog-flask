@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block REGISTERPAGE %} active {% endblock %}
+
+{% block page_content %}
+<br>
+<div class="container col-3 border">
+  <br>
+  <form class="form-register" method="POST" action={{ url_for('blueprint_app.register') }} novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      <h1 class="h5 mb-3 font-weight-normal">Please enter all lines!</h1>
+    </div>
+    <div class="mb-3">
+      {{ form.first_name(class="form-control forms-inputs", placeholder="First name") }}
+    </div>
+    <div class="mb-3">
+      {{ form.last_name(class="form-control forms-inputs", placeholder="Last name") }}
+    </div>
+    <div class="mb-3">
+      {{ form.phonenumber(class="form-control forms-inputs", placeholder="Phonenumber") }}
+    </div>
+    <div class="mb-3">
+      {{ form.email(class="form-control forms-inputs", placeholder="Email") }}
+    </div>
+    <div class="mb-3">
+      {{ form.user_name(class="form-control forms-inputs", placeholder="Username") }}
+    </div>
+    <div class="mb-3">
+      {{ form.password(class="form-control forms-inputs", placeholder="Password") }}
+    </div>
+    <div class="mb-3">
+      {{ form.confirm(class="form-control forms-inputs", placeholder="Confirm password") }}
+    </div>
+    <div align="right">
+      {{ form.submit(class="btn btn-outline-secondary btn-block") }}
+    </div>
+    <br>
+  </form>
+</div>
+{% endblock %}
