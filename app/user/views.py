@@ -6,6 +6,7 @@ from app.models import User, Role
 from app.utils import send_password_reset_email
 from .forms import RegisterForm, LoginForm, EditProfileForm, ResetPasswordForm, ResetPasswordForm_token
 
+
 @blueprint_user.route('/<username>')
 def user(username):
     return render_template('user/user.html', user=user, title='User page')

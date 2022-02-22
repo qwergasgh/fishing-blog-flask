@@ -6,6 +6,6 @@ blueprint_app = Blueprint('blueprint_app',
                           template_folder='templates', 
                           static_folder='static')
 
-@app.route('/')
+@blueprint_app.route('/')
 def home(): 
     return render_template('homepage.html')
