@@ -6,7 +6,6 @@ from datetime import datetime
 import jwt
 
 
-
 class User(db.Model, UserMixin):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
@@ -58,22 +57,25 @@ class User(db.Model, UserMixin):
             return
         return User.query.get(id)
 
+
 class AnonymousUser(AnonymousUserMixin):
     def is_administrator(self):
         return False
 
+
 login.anonymous_user = AnonymousUser
+
 
 @login.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 class Role(db.Model):
     __tablename__ = 'Role'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     privilege = db.Column(db.Boolean, index=True)
-
 
 
 class Post(db.Model):

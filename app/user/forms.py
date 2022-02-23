@@ -16,7 +16,6 @@ class LoginForm(FlaskForm):
 
     def validate(self):
         initial_validation = super(LoginForm, self).validate()
-        print(initial_validation)
         if not initial_validation:
             return False
         user = User.query.filter_by(email=self.email.data).first()
