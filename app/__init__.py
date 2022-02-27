@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
+from flask_cors import CORS
 
 
 def create_blueprints():
@@ -17,6 +18,7 @@ app = Flask(__name__)
 app.config.from_object(BaseConfig)
 
 csrf = CSRFProtect(app)
+CORS(app)
 
 db = SQLAlchemy()
 db.init_app(app)
