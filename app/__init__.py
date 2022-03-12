@@ -10,8 +10,10 @@ from flask_cors import CORS
 def create_blueprints():
     from .views import blueprint_app
     from app.user import blueprint_user
+    from app.blog import blueprint_blog
     app.register_blueprint(blueprint_app)
     app.register_blueprint(blueprint_user, url_prefix="/user")
+    app.register_blueprint(blueprint_blog, url_prefix="/blog")
 
 
 app = Flask(__name__)
