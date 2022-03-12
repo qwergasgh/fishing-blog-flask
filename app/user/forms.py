@@ -77,10 +77,10 @@ class RegisterForm(FlaskForm):
 class EditProfileForm(FlaskForm):
     user_name = StringField('Username',
                             validators=[DataRequired(),
-                            Length(min=3, max=64), 
-                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 
-                                   0,
-                                   'Usernames must have only letters, numbers, dots or underscores')])
+                                        Length(min=3, max=64), 
+                                        Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 
+                                        0,
+                                        'Usernames must have only letters, numbers, dots or underscores')])
     email = EmailField('Email',
                        validators=[DataRequired(), 
                                    Email(), 
@@ -98,9 +98,9 @@ class EditProfileForm(FlaskForm):
                                           0, 
                                           'Phonenumber must have only numbers')])
 
-    avatar = FileField('Avatar', 
-                     validators=[FileRequired(), 
-                                 FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
+    avatar = FileField('Upload avatar', 
+                       validators=[FileRequired(), 
+                                   FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
     submit = SubmitField('Save', validators=[InputRequired()])
 
     def __init__(self, *args, **kwargs):

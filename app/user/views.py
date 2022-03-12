@@ -1,10 +1,13 @@
 from app.user import blueprint_user
 from flask import render_template, redirect, url_for, request, current_app, abort
 from flask_login import login_required, login_user, logout_user, current_user
-from app import db
+from app import db, app
 from app.models import User, Role
 from app.utils import send_password_reset_email
 from .forms import RegisterForm, LoginForm, EditProfileForm, ResetPasswordForm, ResetPasswordForm_token
+from werkzeug.utils import secure_filename
+import os
+from werkzeug.datastructures import CombinedMultiDict
 
 
 @blueprint_user.route('/<username>')
@@ -13,18 +16,6 @@ def user(username):
     if user is None:
         abort(404)
     return render_template('user/user.html', user=user, title='User page')
-
-@blueprint_user.route('/upload_avatar', methods=['POST'])
-def upload_image():
-    uploaded_file = request.files['file']
-    filename = secure_filename(uploaded_file.filename)
-    if filename != '':
-        file_ext = os.path.splitext(filename)[1]
-        if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
-                file_ext != validate_image(uploaded_file.stream):
-            abort(400)
-        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-    return redirect(url_for('index'))
 
 
 @blueprint_user.route('/register', methods=['GET', 'POST'])
@@ -71,6 +62,10 @@ def edit_profile():
     name = current_user.user_name
     form = EditProfileForm()
     if form.validate_on_submit():
+        file = form.avatar.data
+        file_path = os.path.join(app.config['AVATAR_DIR'], name)
+        file.save(file_path)
+        current_user.avatar = file_path
         current_user.user_name = form.user_name.data
         current_user.email = form.email.data
         current_user.first_name = form.first_name.data
@@ -79,6 +74,11 @@ def edit_profile():
         db.session.add(current_user)
         db.session.commit()
         return redirect(url_for('blueprint_user.edit_profile'))
+    avatar = current_user.avatar
+    if avatar is None:
+        avatar = 'avatars/user_avatar.png'
+    else:
+        avatar = avatar.split(app.config['AVATAR_DIR'])[1]
     form.user_name.data = current_user.user_name
     form.email.data = current_user.email
     form.first_name.data = current_user.first_name
@@ -87,7 +87,8 @@ def edit_profile():
     return render_template('user/edit_profile.html',
                            title=f"Edit profile {name}",
                            form=form,
-                           name=name)
+                           name=name,
+                           avatar_path=avatar)
 
 
 @blueprint_user.route('/reset_password', methods=['GET', 'POST'])

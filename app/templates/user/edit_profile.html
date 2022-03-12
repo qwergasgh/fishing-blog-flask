@@ -8,9 +8,10 @@
   <form class="form-edit" method="POST" action="{{ url_for('blueprint_user.edit_profile') }}" novalidate>
     {{ form.hidden_tag() }}
     <div class="mb-3 pt-3" align="center">
-      <a>
-        <img class="img-rounded profile-thumbnail align-center" src="{{ url_for('static', filename='avatars/a.png') }}" width="128" height="128">
-      </a>
+        <img class="img-rounded profile-thumbnail align-center" src="{{ url_for('static', filename=avatar_path) }}" width="128" height="128">
+    </div>
+    <div class="mb-3">
+      {{ form.avatar }}
     </div>
     <div class="mb-3">
       {{ form.user_name.label }}
@@ -33,7 +34,7 @@
       {{ form.email(class="form-control forms-inputs", placeholder="Email") }}
     </div>
     <div class="mb-3">
-      <a  href="{{ url_for('blueprint_user.reset_password') }}">Edit password</a>
+      <a href="{{ url_for('blueprint_user.reset_password') }}">Edit password</a>
     </div>
     <div>
       {{ form.submit(class="btn btn-outline-secondary btn-block") }}

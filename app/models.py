@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     created = db.Column(db.DateTime(), default=datetime.utcnow)
     updated = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
+    avatar = db.Column(db.String(80), nullable=False)
     # posts = db.relationship('Post', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
