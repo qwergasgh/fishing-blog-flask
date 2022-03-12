@@ -1,5 +1,5 @@
 from app.user import blueprint_user
-from flask import render_template, redirect, url_for, request, current_app
+from flask import render_template, redirect, url_for, request, current_app, abort
 from flask_login import login_required, login_user, logout_user, current_user
 from app import db
 from app.models import User, Role
@@ -9,7 +9,22 @@ from .forms import RegisterForm, LoginForm, EditProfileForm, ResetPasswordForm, 
 
 @blueprint_user.route('/<username>')
 def user(username):
+    user = User.query.filter_by(user_name=username).first()
+    if user is None:
+        abort(404)
     return render_template('user/user.html', user=user, title='User page')
+
+@blueprint_user.route('/upload_avatar', methods=['POST'])
+def upload_image():
+    uploaded_file = request.files['file']
+    filename = secure_filename(uploaded_file.filename)
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                file_ext != validate_image(uploaded_file.stream):
+            abort(400)
+        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+    return redirect(url_for('index'))
 
 
 @blueprint_user.route('/register', methods=['GET', 'POST'])
@@ -70,7 +85,7 @@ def edit_profile():
     form.last_name.data = current_user.last_name
     form.phonenumber.data = current_user.phonenumber
     return render_template('user/edit_profile.html',
-                           title="Edit profile",
+                           title=f"Edit profile {name}",
                            form=form,
                            name=name)
 

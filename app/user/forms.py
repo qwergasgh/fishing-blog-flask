@@ -1,5 +1,6 @@
-from wtforms import PasswordField, SubmitField, StringField, EmailField
-from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo
+from wtforms import PasswordField, SubmitField, StringField, EmailField, FileField
+from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo, InputRequired
+from flask_wtf.file import FileRequired, FileAllowed
 from flask_wtf import FlaskForm
 from app.models import User
 
@@ -32,21 +33,27 @@ class RegisterForm(FlaskForm):
     user_name = StringField('Username', 
                             validators=[DataRequired(), 
                             Length(min=3, max=64),
-                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
+                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 
+                                   0,
                                    'Usernames must have only letters, numbers, dots or underscores')])
     email = EmailField('Email',
                        validators=[DataRequired(), Email(), Length(min=3, max=64)])
     password = PasswordField('Password',
                              validators=[DataRequired(), Length(min=8, max=64)])
     confirm = PasswordField('Verify password',
-                            validators=[DataRequired(), EqualTo('password',
-                                                                message='Passwords must match')])
-    first_name = StringField('First name', validators=[DataRequired(), Length(min=3, max=64)])
-    last_name = StringField('Last name', validators=[DataRequired(), Length(min=3, max=64)])
+                            validators=[DataRequired(), 
+                                        EqualTo('password',
+                                                message='Passwords must match')])
+    first_name = StringField('First name', validators=[DataRequired(), 
+                                                       Length(min=3, max=64)])
+    last_name = StringField('Last name', validators=[DataRequired(), 
+                                                     Length(min=3, max=64)])
     phonenumber = StringField('Phonenumber', 
                               validators=[DataRequired(), 
-                              Length(min=10, max=12),
-                              Regexp('[0-9]', 0, "Phonenumber must have only numbers")])
+                                          Length(min=10, max=12),
+                                          Regexp('[0-9]', 
+                                                 0, 
+                                                 "Phonenumber must have only numbers")])
     submit = SubmitField('Register')
 
     def __init__(self, *args, **kwargs):
@@ -71,24 +78,39 @@ class EditProfileForm(FlaskForm):
     user_name = StringField('Username',
                             validators=[DataRequired(),
                             Length(min=3, max=64), 
-                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
+                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 
+                                   0,
                                    'Usernames must have only letters, numbers, dots or underscores')])
     email = EmailField('Email',
-                       validators=[DataRequired(), Email(), Length(min=3, max=64)])
-    first_name = StringField('First name', validators=[DataRequired(), Length(min=3, max=64)])
-    last_name = StringField('Last name', validators=[DataRequired(), Length(min=3, max=64)])
+                       validators=[DataRequired(), 
+                                   Email(), 
+                                   Length(min=3, max=64)])
+    first_name = StringField('First name', 
+                             validators=[DataRequired(), 
+                                         Length(min=3, max=64)])
+    last_name = StringField('Last name', 
+                            validators=[DataRequired(), 
+                                        Length(min=3, max=64)])
     phonenumber = StringField('Phonenumber', 
                               validators=[DataRequired(), 
-                              Length(min=10, max=12),
-                              Regexp('[0-9]', 0, 'Phonenumber must have only numbers')])
-    submit = SubmitField('Save')
+                                          Length(min=10, max=12),
+                                          Regexp('[0-9]', 
+                                          0, 
+                                          'Phonenumber must have only numbers')])
+
+    avatar = FileField('Avatar', 
+                     validators=[FileRequired(), 
+                                 FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
+    submit = SubmitField('Save', validators=[InputRequired()])
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
 class ResetPasswordForm(FlaskForm):
     email = EmailField('Email',
-                       validators=[DataRequired(), Email(), Length(min=3, max=64)])
+                       validators=[DataRequired(), 
+                                   Email(), 
+                                   Length(min=3, max=64)])
     submit = SubmitField('Reset Password')
 
     def __init__(self, *args, **kwargs):
@@ -108,8 +130,10 @@ class ResetPasswordForm(FlaskForm):
 
 class ResetPasswordForm_token(FlaskForm):
     password = PasswordField('Password',
-                             validators=[DataRequired(), Length(min=8, max=64)])
+                             validators=[DataRequired(), 
+                             Length(min=8, max=64)])
     confirm = PasswordField('Verify password',
-                            validators=[DataRequired(), EqualTo('password',
-                                                                message='Passwords must match')])
+                            validators=[DataRequired(), 
+                            EqualTo('password', 
+                                    message='Passwords must match')])
     submit = SubmitField('Reset Password')

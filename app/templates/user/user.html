@@ -3,13 +3,15 @@
 {% block USERPAGE %} active {% endblock %}
 
 {% block page_content %}
-<br>
-<h1 class="h2 mb-3 font-weight-normal">{{ user.user_name }}</h1>
-<div class="container col-4">
+<div class="container col-4" style="margin-top:15px;">
+<h1 class="h3 mb-3 font-weight-normal text-center">{{ user.user_name }}</h1>
 <table class="table border">
-    <tbody>
     <tr>
-        <td>First name:</td>
+        <td rowspan="6">
+        <img class="img-rounded profile-thumbnail" src="{{ url_for('static', filename='avatars/a.png') }}" width="256" height="256">
+        </td>
+    <tr>
+        <td>First name:</th>
         <td>{{ user.first_name }}</td>
     </tr>
     <tr>
@@ -28,7 +30,6 @@
         <td>Registration date:</td>
         <td>{{ user.created }}</td>
     </tr>
-    </tbody>
 </table>
 {% if user == current_user %}
 <div class="col-12">

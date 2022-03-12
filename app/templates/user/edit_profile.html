@@ -3,13 +3,16 @@
 {% block USERPAGE %} active {% endblock %}
 
 {% block page_content %}
-<br>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<h1 class="h5 mb-3 font-weight-normal">Edit profile {{name}}</h1>
-<div class="container col-3 border">
+<div class="container col-3 border" style="margin-top:15px;">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <form class="form-edit" method="POST" action="{{ url_for('blueprint_user.edit_profile') }}" novalidate>
     {{ form.hidden_tag() }}
-    <div class="mb-3 pt-3">
+    <div class="mb-3 pt-3" align="center">
+      <a>
+        <img class="img-rounded profile-thumbnail align-center" src="{{ url_for('static', filename='avatars/a.png') }}" width="128" height="128">
+      </a>
+    </div>
+    <div class="mb-3">
       {{ form.user_name.label }}
       {{ form.user_name(class="form-control forms-inputs", placeholder="Username") }}
     </div>

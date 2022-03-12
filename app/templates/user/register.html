@@ -3,8 +3,7 @@
 {% block REGISTERPAGE %} active {% endblock %}
 
 {% block page_content %}
-<br>
-<div class="container col-3 border">
+<div class="container col-3 border" style="margin-top:15px;">
   <br>
   <form class="form-register" method="POST" action="{{ url_for('blueprint_user.register') }}" novalidate>
     {{ form.hidden_tag() }}
