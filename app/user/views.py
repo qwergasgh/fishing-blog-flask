@@ -14,7 +14,11 @@ def user(username):
     user = User.query.filter_by(user_name=username).first()
     if user is None:
         abort(404)
-    return render_template('user/user.html', user=user, title='User page')
+    avatar = get_avatar(current_user.avatar)
+    return render_template('user/user.html', 
+                           user=user, 
+                           avatar_path=avatar, 
+                           title='User page')
 
 
 @blueprint_user.route('/register', methods=['GET', 'POST'])
