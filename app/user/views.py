@@ -3,11 +3,10 @@ from flask import render_template, redirect, url_for, request, current_app, abor
 from flask_login import login_required, login_user, logout_user, current_user
 from app import db, app
 from app.models import User, Role
-from app.utils import send_password_reset_email
+from app.utils import send_password_reset_email, get_avatar
 from .forms import RegisterForm, LoginForm, EditProfileForm, ResetPasswordForm, ResetPasswordForm_token
 from werkzeug.utils import secure_filename
 import os
-from werkzeug.datastructures import CombinedMultiDict
 
 
 @blueprint_user.route('/<username>')
@@ -63,7 +62,9 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         file = form.avatar.data
-        file_path = os.path.join(app.config['AVATAR_DIR'], name)
+        file_type = file.filename.split('.')[-1]
+        file_name = f'{name}.{file_type}'
+        file_path = os.path.join(app.config['AVATAR_DIR'], file_name)
         file.save(file_path)
         current_user.avatar = file_path
         current_user.user_name = form.user_name.data
@@ -74,11 +75,7 @@ def edit_profile():
         db.session.add(current_user)
         db.session.commit()
         return redirect(url_for('blueprint_user.edit_profile'))
-    avatar = current_user.avatar
-    if avatar is None:
-        avatar = 'avatars/user_avatar.png'
-    else:
-        avatar = avatar.split(app.config['AVATAR_DIR'])[1]
+    avatar = get_avatar(current_user.avatar)
     form.user_name.data = current_user.user_name
     form.email.data = current_user.email
     form.first_name.data = current_user.first_name

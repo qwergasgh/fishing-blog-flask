@@ -25,3 +25,11 @@ def send_password_reset_email(user):
                                          user=user, token=token),
                html_body=render_template('email/reset_password_email.html',
                                          user=user, token=token))
+
+
+def get_avatar(avatar):
+    if avatar is None:
+        avatar = 'avatars/user_avatar.png'
+    else:
+        avatar = avatar.split('static')[1].replace('/', '', 1)
+    return avatar
