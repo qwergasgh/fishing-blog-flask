@@ -4,7 +4,7 @@
 
 {% block page_content %}
 <div class="container col-3 border" style="margin-top:15px;">
-  <br>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <form class="form-signin" method="POST" action="{{ url_for('blueprint_user.login') }}" novalidate>
     {{ form.hidden_tag() }}
     <div class="mb-3">

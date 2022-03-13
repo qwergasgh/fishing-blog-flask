@@ -106,6 +106,7 @@ class EditProfileForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
+
 class ResetPasswordForm(FlaskForm):
     email = EmailField('Email',
                        validators=[DataRequired(), 
@@ -125,7 +126,6 @@ class ResetPasswordForm(FlaskForm):
             self.email.errors.append("Email Error")
             return False
         return True
-
 
 
 class ResetPasswordForm_token(FlaskForm):
