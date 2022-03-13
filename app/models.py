@@ -81,15 +81,19 @@ class Role(db.Model):
 
 
 class Post(db.Model):
+    __tablename__ = 'Post'
     __searchable__ = ['body']
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     body = db.Column(db.String(1024))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    images = db.Column(db.Boolean, index=True)
 
 
 class ImagePost(db.Model):
+    __tablename__ = 'ImagePost'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('Post.id'))
+    path = db.Column(db.String(80), nullable=False)

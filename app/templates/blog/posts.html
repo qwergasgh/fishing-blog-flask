@@ -1,3 +1,14 @@
 {% extends 'base.html' %}
 
 {% block BLOGPAGE %} active {% endblock %}
+
+{% block page_content %}
+<div class="container col-6 border" style="margin-top:15px;">
+    {% for post in posts %}
+        {{ post.title }}
+        {{ post.body }}
+        {{ post.timestamp }}
+    {% endfor %}
+</div>
+<br>
+{% endblock %}

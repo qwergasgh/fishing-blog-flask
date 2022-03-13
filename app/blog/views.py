@@ -3,7 +3,8 @@ from flask import render_template, redirect, url_for
 from flask_login import login_required
 from app.models import User, Post, ImagePost
 from .forms import PostForm
-from app import db
+from app import db, app
+import os
 
 
 @login_required
@@ -11,21 +12,38 @@ from app import db
 def new_post(username):
     form = PostForm()
     if form.validate_on_submit():
+        user_id = User.query.filter_by(user_name=username).first().id
+        if len(form.images.data) > 1:
+            images = True
+        else:
+            images = False
         post = Post(title=form.title.data, 
                     body=form.body.data, 
-                    user_id=User.query.order_by(user_name=username).first())
-
+                    user_id=user_id,
+                    images=images)
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('blueprint_blog.posts', username=username))
+        item = 0
+        if images:
+            for _image in form.images.data:
+                file_type = _image.filename.split('.')[-1]
+                file_name = f'{post.id}_{item}.{file_type}'
+                file_path = os.path.join(app.config['UPLOAD_DIR'], file_name)
+                _image.save(file_path)
+                image = ImagePost(user_id=user_id, post_id=post.id, path=file_path)
+                db.session.add(image)
+                item += 1
+            db.session.commit()
+        return redirect(url_for('blueprint_blog.posts_user', username=username))
     return render_template('blog/new_post.html', title='New Post', form=form, files=None)
 
 
 @login_required
-@blueprint_blog.route('/<username>')
+@blueprint_blog.route('/<username>', methods=['GET', 'POST'])
 def posts_user(username):
-    posts = Post.query.order_by(user_id=User.query.order_by(user_name=username)).all()
-    return render_template('blog/posts.html', title=f'{username} Posts', posts=posts)
+    id_user = User.query.filter_by(user_name=username).first().id
+    posts = Post.query.filter_by(user_id=id_user).all()
+    return render_template('blog/posts.html', title=f'Posts by {username}', posts=posts)
 
 
 # @login_required
