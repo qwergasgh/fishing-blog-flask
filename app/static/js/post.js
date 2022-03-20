@@ -15,14 +15,14 @@ function get_images(id) {
         data: JSON.stringify({id_post: id}),
         contentType: 'application/json',
         success: function(response) {
-            console.log(response.status + ' ' + response.valid);
+            console.log('valid: ' + response.valid);
             for (i in response.path_images) {
-                console.log(response.path_images[i])
                 img = document.createElement('img');
-                img.src = "{{ url_for('static', filename='" + response.path_images[i] + "') }}";
                 img.class = "img-rounded profile-thumbnail";
+                img.src = "{{ url_for('static', filename='" + response.path_images[i] + "') }}";
                 img.width = "256";
                 img.height = "256";
+                console.log(img)
                 document.getElementById(id).append(img);
             }
         },

@@ -47,13 +47,6 @@ def posts_user(username):
     return render_template('blog/posts.html', title=f'Posts by {username}', posts=posts)
 
 
-# @login_required
-# @blueprint_blog.route('/upload_image/<filename>')
-# def upload_image(filename):
-#     return send_from_directory(os.path.join(
-#         app.config['UPLOAD_PATH'], current_user.get_id()), filename)
-
-
 @login_required
 @blueprint_blog.route('/get_images', methods=['POST'])
 def get_images():

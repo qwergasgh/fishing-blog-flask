@@ -5,7 +5,6 @@ from app import db, app
 from app.models import User, Role
 from app.utils import send_password_reset_email, get_avatar
 from .forms import RegisterForm, LoginForm, EditProfileForm, ResetPasswordForm, ResetPasswordForm_token
-from werkzeug.utils import secure_filename
 import os
 
 
@@ -15,7 +14,6 @@ def user(username):
     if user is None:
         abort(404)
     avatar = get_avatar(current_user.avatar)
-    print(avatar)
     return render_template('user/user.html', 
                            user=user, 
                            avatar_path=avatar, 

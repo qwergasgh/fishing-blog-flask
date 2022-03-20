@@ -29,7 +29,6 @@ def send_password_reset_email(user):
 
 def get_avatar(avatar):
     if avatar is None:
-        avatar = 'avatars/user_avatar.png'
+        return 'avatars/user_avatar.png'
     else:
-        avatar = avatar.split('static')[1].replace('/', '', 1)
-    return avatar
+        return avatar
