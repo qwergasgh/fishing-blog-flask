@@ -8,4 +8,4 @@ blueprint_app = Blueprint('blueprint_app',
 
 @blueprint_app.route('/')
 def home():
-    return render_template('home_page.html')
+    return render_template('home_page.html', title='Fishng Blog')

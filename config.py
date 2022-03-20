@@ -5,8 +5,10 @@ class BaseConfig:
     # app
     APP_DIR = os.path.abspath(os.path.dirname(__file__))
     BASE_DIR = os.path.join(APP_DIR, 'app', 'db_app.db')
-    AVATAR_DIR = os.path.join(APP_DIR, 'app', 'static', 'avatars')
-    UPLOAD_DIR = os.path.join(APP_DIR, 'app', 'static', 'upload')
+    AVATAR_DIR_PATH = os.path.join(APP_DIR, 'app', 'static', 'avatars')
+    AVATAR_DIR = 'avatars'
+    UPLOAD_DIR_PATH = os.path.join(APP_DIR, 'app', 'static', 'upload')
+    UPLOAD_DIR = 'upload'
     SECRET_KEY = 'my_secret_key' 
     DEBUG = True
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024

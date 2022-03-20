@@ -1,6 +1,6 @@
 from app.blog import blueprint_blog
-from flask import render_template, redirect, url_for
-from flask_login import login_required
+from flask import render_template, redirect, url_for, jsonify, request
+from flask_login import login_required, current_user
 from app.models import User, Post, ImagePost
 from .forms import PostForm
 from app import db, app
@@ -28,9 +28,10 @@ def new_post(username):
             for _image in form.images.data:
                 file_type = _image.filename.split('.')[-1]
                 file_name = f'{post.id}_{item}.{file_type}'
-                file_path = os.path.join(app.config['UPLOAD_DIR'], file_name)
+                file_path = os.path.join(app.config['UPLOAD_DIR_PATH'], file_name)
                 _image.save(file_path)
-                image = ImagePost(user_id=user_id, post_id=post.id, path=file_path)
+                file_db_path = os.path.join(app.config['UPLOAD_DIR'], file_name)
+                image = ImagePost(user_id=user_id, post_id=post.id, path=file_db_path)
                 db.session.add(image)
                 item += 1
             db.session.commit()
@@ -52,3 +53,14 @@ def posts_user(username):
 #     return send_from_directory(os.path.join(
 #         app.config['UPLOAD_PATH'], current_user.get_id()), filename)
 
+
+@login_required
+@blueprint_blog.route('/get_images', methods=['POST'])
+def get_images():
+    try:
+        if request.method == 'POST':
+            id_post = int(request.json['id_post'])
+            path_images = [img.path for img in ImagePost.query.filter_by(post_id=id_post).all()]
+            return jsonify({'valid': 'True', 'path_images': path_images}), 200
+    except:
+        return jsonify({'valid': 'False'}), 400
