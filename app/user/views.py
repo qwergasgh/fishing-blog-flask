@@ -15,6 +15,7 @@ def user(username):
     if user is None:
         abort(404)
     avatar = get_avatar(current_user.avatar)
+    print(avatar)
     return render_template('user/user.html', 
                            user=user, 
                            avatar_path=avatar, 
@@ -68,9 +69,10 @@ def edit_profile():
         file = form.avatar.data
         file_type = file.filename.split('.')[-1]
         file_name = f'{name}.{file_type}'
-        file_path = os.path.join(app.config['AVATAR_DIR'], file_name)
+        file_path = os.path.join(app.config['AVATAR_DIR_PATH'], file_name)
         file.save(file_path)
-        current_user.avatar = file_path
+        file_db_path = os.path.join(app.config['AVATAR_DIR'], file_name)
+        current_user.avatar = file_db_path
         current_user.user_name = form.user_name.data
         current_user.email = form.email.data
         current_user.first_name = form.first_name.data
