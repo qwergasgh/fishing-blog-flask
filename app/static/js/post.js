@@ -19,15 +19,21 @@ function get_images(id) {
             for (i in response.path_images) {
                 img = document.createElement('img');
                 img.class = "img-rounded profile-thumbnail";
-                img.src = "{{ url_for('static', filename='" + response.path_images[i] + "') }}";
+                // img.src = "{{ url_for('static', filename='" + response.path_images[i] + "') }}";
+                img.src = '/static/' + response.path_images[i];
                 img.width = "256";
                 img.height = "256";
-                console.log(img)
                 document.getElementById(id).append(img);
             }
+            document.getElementById(id.toString() + "_button").onclick = "disable_images(" + id + ")";
+            document.getElementById(id.toString() + "_button").textContent = "Remove Images";
         },
         error: function(error) {
             console.log(error.status + ' ' + error.valid);
         }
     });
+}
+
+function disable_images(id) {
+    console.log('ok')
 }

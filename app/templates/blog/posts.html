@@ -10,11 +10,10 @@
             {{ post.title }}
             {{ post.body }}
             {{ post.timestamp }}
-        <div>
-        <button class="btn btn-outline-secondary btn-block" onclick="get_images({{ post.id }})">Show Images</button>
+        </div>
+        <button id="{{ post.id }}_button" class="btn btn-outline-secondary btn-block" onclick="get_images({{ post.id }})">Show Images</button>
     {% endfor %}
 </div>
-<br>
 {% endblock %}
 
 {% block scripts %}
